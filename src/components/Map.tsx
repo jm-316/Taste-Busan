@@ -3,6 +3,7 @@
 
 import Script from "next/script";
 import React from "react";
+import * as stores from "@/data/store_data.json";
 
 declare global {
   interface Window {
@@ -19,7 +20,20 @@ export default function Map() {
         level: 3,
       };
 
-      new window.kakao.maps.Map(mapContainer, mapOptions);
+      const map = new window.kakao.maps.Map(mapContainer, mapOptions);
+
+      stores?.["item"]?.map((store) => {
+        const markerPosition = new window.kakao.maps.LatLng(
+          store?.lat,
+          store?.lng
+        );
+
+        const marker = new window.kakao.maps.Marker({
+          position: markerPosition,
+        });
+
+        marker.setMap(map);
+      });
     });
   };
   return (
