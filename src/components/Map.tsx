@@ -1,9 +1,11 @@
 /*global kakao*/
 "use client";
 
+import { useSelector } from "react-redux";
 import Script from "next/script";
-import React from "react";
-import * as stores from "@/data/store_data.json";
+import React, { useContext } from "react";
+import { RootState } from "@/store/store";
+import MapContext from "@/context/MapContext";
 
 declare global {
   interface Window {
@@ -11,29 +13,30 @@ declare global {
   }
 }
 
-export default function Map() {
-  const loadkakaoMap = () => {
+interface MapProps {
+  lat?: number | null;
+  lng?: number | null;
+  zoom?: number;
+}
+
+export default function Map({ lat, lng, zoom }: MapProps) {
+  const location = useSelector((state: RootState) => state.map.locationState);
+  const context = useContext(MapContext);
+
+  const loadKakaoMap = () => {
     window.kakao.maps.load(() => {
       const mapContainer = document.getElementById("map");
       const mapOptions = {
-        center: new window.kakao.maps.LatLng(35.156233328065, 129.05793488419),
-        level: 3,
+        center: new window.kakao.maps.LatLng(
+          lat || location.lat,
+          lng || location.lng
+        ),
+        level: zoom || location.zoom,
       };
 
       const map = new window.kakao.maps.Map(mapContainer, mapOptions);
 
-      stores?.["item"]?.map((store) => {
-        const markerPosition = new window.kakao.maps.LatLng(
-          store?.lat,
-          store?.lng
-        );
-
-        const marker = new window.kakao.maps.Marker({
-          position: markerPosition,
-        });
-
-        marker.setMap(map);
-      });
+      context?.setMap(map);
     });
   };
   return (
@@ -42,7 +45,7 @@ export default function Map() {
         strategy="afterInteractive"
         type="text/javascript"
         src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_CLIENT}&autoload=false`}
-        onReady={loadkakaoMap}
+        onReady={loadKakaoMap}
       />
       <div id="map" className="w-full h-screen"></div>
     </>
