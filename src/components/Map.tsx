@@ -1,9 +1,11 @@
 /*global kakao*/
 "use client";
 
+import { useSelector } from "react-redux";
 import Script from "next/script";
-import React, { Dispatch, SetStateAction } from "react";
-import * as stores from "@/data/store_data.json";
+import React, { useContext } from "react";
+import { RootState } from "@/store/store";
+import MapContext from "@/context/MapContext";
 
 declare global {
   interface Window {
@@ -11,26 +13,30 @@ declare global {
   }
 }
 
-const DEFAULT_LAT = 35.156233328065;
-const DEFAULT_LNG = 129.05793488419;
-const DEFAULT_ZOOM = 3;
-
 interface MapProps {
-  setMap: Dispatch<SetStateAction<any>>;
+  lat?: number | null;
+  lng?: number | null;
+  zoom?: number;
 }
 
-export default function Map({ setMap }: MapProps) {
-  const loadkakaoMap = () => {
+export default function Map({ lat, lng, zoom }: MapProps) {
+  const location = useSelector((state: RootState) => state.map.locationState);
+  const context = useContext(MapContext);
+
+  const loadKakaoMap = () => {
     window.kakao.maps.load(() => {
       const mapContainer = document.getElementById("map");
       const mapOptions = {
-        center: new window.kakao.maps.LatLng(DEFAULT_LAT, DEFAULT_LNG),
-        level: DEFAULT_ZOOM,
+        center: new window.kakao.maps.LatLng(
+          lat || location.lat,
+          lng || location.lng
+        ),
+        level: zoom || location.zoom,
       };
 
       const map = new window.kakao.maps.Map(mapContainer, mapOptions);
 
-      setMap(map);
+      context?.setMap(map);
     });
   };
   return (
@@ -39,7 +45,7 @@ export default function Map({ setMap }: MapProps) {
         strategy="afterInteractive"
         type="text/javascript"
         src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_CLIENT}&autoload=false`}
-        onReady={loadkakaoMap}
+        onReady={loadKakaoMap}
       />
       <div id="map" className="w-full h-screen"></div>
     </>

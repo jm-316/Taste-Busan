@@ -1,24 +1,28 @@
-"use client";
-
-import { useState } from "react";
 import Map from "@/components/Map";
 import Markers from "@/components/Markers";
 import StoreBox from "@/components/StoreBox";
-import * as stores from "@/data/store_data.json";
+import { StoreType } from "@/interface";
 
-export default function Home() {
-  const [map, setMap] = useState(null);
-  const [currentStore, setCurrentStore] = useState(null);
-  const storeDatas = stores["item"];
+export default async function Home() {
+  const stores: StoreType[] = await getData();
+
   return (
     <>
-      <Map setMap={setMap} />
-      <Markers
-        map={map}
-        storeDatas={storeDatas}
-        setCurrentStore={setCurrentStore}
-      />
-      <StoreBox store={currentStore} setStore={setCurrentStore} />
+      <Map />
+      <Markers stores={stores} />
+      <StoreBox />
     </>
   );
+}
+
+async function getData() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/stores`, {
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch data");
+  }
+
+  return res.json();
 }
