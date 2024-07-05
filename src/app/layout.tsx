@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
+import { NextLayout, NextProvider } from "./provider";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
 
 export const metadata: Metadata = {
   title: "Taste Busan",
@@ -14,9 +14,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="pt-[52px]">
-        <Navbar />
-        <main>{children}</main>
+      <body>
+        <NextProvider>
+          <NextLayout>{children}</NextLayout>
+        </NextProvider>
       </body>
     </html>
   );
