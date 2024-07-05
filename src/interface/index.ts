@@ -1,0 +1,21 @@
+export interface StoreType {
+  id: number;
+  name?: string | null;
+  phone?: string | null;
+  lat?: number;
+  lng?: number;
+  address?: string | null;
+  menu?: string | null;
+  time?: string | null;
+  homepageUrl?: string | null;
+}
+
+export interface StoreApiResponse {
+  data: StoreType[];
+}
+
+export interface Location {
+  lat: number;
+  lng: number;
+  zoom: number;
+}
