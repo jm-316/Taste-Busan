@@ -10,7 +10,7 @@ export default function StoreList({ store }: StoreListProps) {
 
   return (
     <li
-      className="flex justify-between gap-6 py-5 cursor-pointer hover:bg-gray-50"
+      className="flex justify-between gap-6 py-9 cursor-pointer hover:bg-gray-50"
       key={store?.id}
       onClick={() => router.push(`/stores/${store?.id}`)}>
       <div className="flex gap-x-4">
