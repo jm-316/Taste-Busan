@@ -22,3 +22,8 @@ export interface Location {
   lng: number;
   zoom: number;
 }
+
+export interface SearchType {
+  query?: string;
+  district?: string;
+}
