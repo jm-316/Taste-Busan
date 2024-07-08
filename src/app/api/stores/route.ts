@@ -5,12 +5,18 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const page = searchParams.get("page");
   const limit = searchParams.get("limit") as string;
+  const query = searchParams.get("query");
+  const district = searchParams.get("district");
 
   if (page) {
     const count = await prisma.store.count();
     const skipPage = parseInt(page) - 1;
     const stores = await prisma.store.findMany({
       orderBy: { id: "asc" },
+      where: {
+        name: query ? { contains: query } : {},
+        localCategory: district ? { contains: district } : {},
+      },
       take: parseInt(limit),
       skip: skipPage * 10,
     });
