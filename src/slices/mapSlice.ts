@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Location, StoreType } from "@/interface";
+import { Location, SearchType, StoreType } from "@/interface";
 
 const DEFAULT_LAT = 35.156233328065;
 const DEFAULT_LNG = 129.05793488419;
@@ -14,6 +14,7 @@ export const mapSlice = createSlice({
       zoom: DEFAULT_ZOOM,
     },
     currentStoreState: null as StoreType | null,
+    searchState: null as SearchType | null,
   },
   reducers: {
     setCurrentStore: (state, action: PayloadAction<StoreType | null>) => {
@@ -22,9 +23,13 @@ export const mapSlice = createSlice({
     setLocation: (state, action: PayloadAction<Location>) => {
       state.locationState = action.payload;
     },
+    setSearchState: (state, action: PayloadAction<SearchType | null>) => {
+      state.searchState = action.payload;
+    },
   },
 });
 
-export const { setCurrentStore, setLocation } = mapSlice.actions;
+export const { setCurrentStore, setLocation, setSearchState } =
+  mapSlice.actions;
 
 export default mapSlice.reducer;
