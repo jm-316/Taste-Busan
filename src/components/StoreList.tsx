@@ -10,25 +10,30 @@ export default function StoreList({ store }: StoreListProps) {
 
   return (
     <li
-      className="flex justify-between gap-6 py-9 cursor-pointer hover:bg-gray-50"
+      className="flex flex-col justify-between gap-3 py-5 cursor-pointer hover:bg-gray-50"
       key={store?.id}
       onClick={() => router.push(`/stores/${store?.id}`)}>
-      <div className="flex gap-x-4">
+      <div className="flex justify-between ">
         <div>
           <div className="text-sm leading-6 text-blue-800 font-bold">
             {store?.name}
           </div>
-          <div className="mt-1 text-xs truncate font-semibold leading-5 text-gray-500">
-            {store?.phone || "번호없음"}
-          </div>
         </div>
-      </div>
-      <div className="hidden sm:flex sm:flex-col sm:items-end">
-        <div className="text-sm leading-6  text-blue-900 font-bold">
+        <div className="text-sm leading-6 text-blue-900 font-bold hidden sm:flex sm:flex-col sm:items-end">
           {store?.address}
         </div>
+      </div>
+      <div>
+        {store?.menu && (
+          <div className="text-xs truncate font-semibold leading-5 text-gray-500">
+            메뉴 | {store?.menu}
+          </div>
+        )}
         <div className="mt-1 text-xs truncate font-semibold leading-5 text-gray-500">
-          {store?.menu} | {store?.time}
+          영업 시간 | {store?.time}
+        </div>
+        <div className="mt-1 text-xs truncate font-semibold leading-5 text-gray-500">
+          전화번호 | {store?.phone || "번호없음"}
         </div>
       </div>
     </li>

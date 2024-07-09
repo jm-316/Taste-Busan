@@ -15,6 +15,7 @@ async function seedData() {
       time: store?.usage_day_week_and_time,
       homepage:
         typeof store?.homepage_url === "string" ? store.homepage_url : null,
+      localCategory: store?.gugun_nm,
     };
 
     const res = await prisma.store.create({

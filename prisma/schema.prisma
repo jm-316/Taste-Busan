@@ -30,5 +30,6 @@ model Store {
   menu      String?
   time      String?
   homepage  String?
+  localCategory String?
 }
 

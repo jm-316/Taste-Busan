@@ -2,23 +2,33 @@
 
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { useSelector } from "react-redux";
 import React, { useCallback, useEffect, useRef } from "react";
 import useIntersectionObserver from "@/hook/useIntersectionObserver";
-import { StoreType } from "@/interface";
 import StoreList from "@/components/StoreList";
 import Loading from "@/components/Loading";
 import Loader from "@/components/Loader";
+import SearchFilter from "@/components/SearchFilter";
+import { RootState } from "@/store/store";
+import { StoreType } from "@/interface";
 
 export default function StorePage() {
   const ref = useRef<HTMLDivElement | null>(null);
   const pageRef = useIntersectionObserver(ref, {});
   const isPageEnd = !!pageRef?.isIntersecting;
+  const search = useSelector((state: RootState) => state.map.searchState);
+
+  const searchParams = {
+    query: search?.query,
+    district: search?.district,
+  };
 
   const fetchStores = async ({ pageParam = 1 }) => {
     const { data } = await axios("/api/stores?page=" + pageParam, {
       params: {
         limit: 10,
         page: pageParam,
+        ...searchParams,
       },
     });
 
@@ -34,7 +44,7 @@ export default function StorePage() {
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery({
-    queryKey: ["stores"],
+    queryKey: ["stores", searchParams],
     queryFn: fetchStores,
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
@@ -69,6 +79,7 @@ export default function StorePage() {
 
   return (
     <div className="px-4 md:max-w-4xl mx-auto py-8 mt-7">
+      <SearchFilter />
       <ul role="list" className="divide-y divide-gray-300">
         {isLoading ? (
           <Loading />
