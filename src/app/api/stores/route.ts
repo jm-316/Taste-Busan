@@ -7,6 +7,7 @@ export async function GET(req: Request) {
   const limit = searchParams.get("limit") as string;
   const query = searchParams.get("query");
   const district = searchParams.get("district");
+  const id = searchParams.get("id");
 
   if (page) {
     const count = await prisma.store.count();
@@ -35,9 +36,12 @@ export async function GET(req: Request) {
   } else {
     const stores = await prisma.store.findMany({
       orderBy: { id: "asc" },
+      where: {
+        id: id ? parseInt(id) : {},
+      },
     });
 
-    return NextResponse.json(stores, {
+    return NextResponse.json(id ? stores[0] : stores, {
       status: 200,
     });
   }
