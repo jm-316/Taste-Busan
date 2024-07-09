@@ -14,6 +14,10 @@
   @apply text-gray-500;
 }
 
+.layout {
+  @apply pt-[52px];
+}
+
 .navbar__button {
   @apply hidden cursor-pointer;
 }
@@ -45,4 +49,13 @@
 
 .infowindow {
   @apply bg-blue-900 text-white block text-sm text-center h-6 rounded-sm px-2 leading-6;
+}
+
+#map {
+  width: 100%;
+  height: 100vh;
+}
+
+.detail-map #map {
+  height: 600px;
 }
