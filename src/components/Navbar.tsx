@@ -1,11 +1,11 @@
-"use client";
-
 import { IoMenu, IoClose } from "react-icons/io5";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { status } = useSession();
   return (
     <>
       <div className="flex justify-between items-center fixed w-full h-[52px] top-0 shadow-sm bg-white z-[100]">
@@ -27,9 +27,15 @@ export default function Navbar() {
           <Link href="/users/mypage" className="navbar__list--item">
             마이페이지
           </Link>
-          <Link href="" className="navbar__list--item">
-            로그인
-          </Link>
+          {status === "authenticated" ? (
+            <button type="button" onClick={() => signOut()}>
+              로그아웃
+            </button>
+          ) : (
+            <Link href="/api/auth/signin" className="navbar__list--item">
+              로그인
+            </Link>
+          )}
         </div>
         <div
           className="navbar__button"
@@ -51,9 +57,20 @@ export default function Navbar() {
               <Link href="/users/mypage" className="navbar__list--item--mobile">
                 마이페이지
               </Link>
-              <Link href="" className="navbar__list--item--mobile">
-                로그인
-              </Link>
+              {status === "authenticated" ? (
+                <button
+                  type="button"
+                  onClick={() => signOut()}
+                  className="navbar__list--item--mobile text-left">
+                  로그아웃
+                </button>
+              ) : (
+                <Link
+                  href="/api/auth/signin"
+                  className="navbar__list--item--mobile">
+                  로그인
+                </Link>
+              )}
             </div>
           </div>
         )}
