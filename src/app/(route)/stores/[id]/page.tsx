@@ -2,6 +2,9 @@
 
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { toast } from "react-toastify";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Loader from "@/components/Loader";
 import Map from "@/components/Map";
@@ -12,7 +15,10 @@ export default function StoreDetailPage({
 }: {
   params: { id: string };
 }) {
+  const { status } = useSession();
   const id = params.id;
+  const router = useRouter();
+
   const fetchStore = async () => {
     const { data } = await axios(`/api/stores?id=${id}`);
     return data;
@@ -26,6 +32,8 @@ export default function StoreDetailPage({
   } = useQuery({
     queryKey: [`store-${id}`],
     queryFn: fetchStore,
+    enabled: !!id,
+    refetchOnWindowFocus: false,
   });
 
   if (isError) {
@@ -38,6 +46,26 @@ export default function StoreDetailPage({
 
   if (isFetching) return <Loader className="mt-[20%]" />;
 
+  const handleDelete = async () => {
+    const confirm = window.confirm("해당 가게를 삭제하시겠습니까?");
+
+    if (confirm) {
+      try {
+        const result = await axios.delete(`/api/stores?id=${store.id}`);
+
+        if (result.status === 200) {
+          router.replace("/");
+          toast.success("가게를 삭제했습니다.");
+        } else {
+          toast.error("다시 시도해주세요.");
+        }
+      } catch (error) {
+        console.log(error);
+        toast.error("다시 시도해주세요.");
+      }
+    }
+  };
+
   return (
     <>
       <div className="max-w-5xl mx-auto px-4 py-8 ">
@@ -47,7 +75,7 @@ export default function StoreDetailPage({
               {store?.name}
             </h3>
           </div>
-          {store && (
+          {status === "authenticated" && store && (
             <div className="flex items-center gap-4 px-4 py-3">
               <Link
                 className="underline hover:text-gray-400 text-sm"
@@ -56,7 +84,8 @@ export default function StoreDetailPage({
               </Link>
               <button
                 type="button"
-                className="underline  hover:text-gray-400 text-sm">
+                className="underline hover:text-gray-400 text-sm"
+                onClick={handleDelete}>
                 삭제
               </button>
             </div>
@@ -96,13 +125,13 @@ export default function StoreDetailPage({
                 {store?.phone}
               </dd>
             </div>
-            {store?.homepageUrl && (
+            {store?.homepage && (
               <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt className="text-sm font-medium leading-6 text-gray-900">
                   홈페이지
                 </dt>
                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                  {store?.homepageUrl}
+                  {store?.homepage}
                 </dd>
               </div>
             )}
