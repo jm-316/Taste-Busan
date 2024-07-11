@@ -71,3 +71,49 @@ export async function POST(req: Request) {
 
   return NextResponse.json(result, { status: 200 });
 }
+
+export async function PUT(req: Request) {
+  const formData = await req.json();
+  const headers = {
+    Authorization: `KakaoAK ${process.env.KAKAO_CLIENT_ID}`,
+  };
+
+  const { data } = await axios.get(
+    `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURI(
+      formData.address
+    )}`,
+    { headers }
+  );
+
+  const result = await prisma.store.update({
+    where: { id: formData.id },
+    data: {
+      ...formData,
+      lat: parseFloat(data.documents[0].y),
+      lng: parseFloat(data.documents[0].x),
+    },
+  });
+
+  return NextResponse.json(result, { status: 200 });
+}
+
+export async function DELETE(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const id = searchParams.get("id");
+
+  if (id) {
+    const result = await prisma.store.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    return NextResponse.json(result, {
+      status: 200,
+    });
+  }
+
+  return NextResponse.json(null, {
+    status: 500,
+  });
+}

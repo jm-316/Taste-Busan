@@ -51,7 +51,7 @@ export default function StoreBox() {
               <IoIosTimer />
               {store?.time}
             </div>
-            {store?.homepageUrl && (
+            {store?.homepage && (
               <div className="mt-2 flex gap-2 items-center">
                 <TbWorld />
                 <div
@@ -61,7 +61,7 @@ export default function StoreBox() {
                     textOverflow: "ellipsis",
                     maxWidth: "220px",
                   }}>
-                  <Link href={store?.homepageUrl}>{store.homepageUrl}</Link>
+                  <Link href={store?.homepage}>{store.homepage}</Link>
                 </div>
               </div>
             )}
