@@ -7,7 +7,8 @@ export interface StoreType {
   address?: string | null;
   menu?: string | null;
   time?: string | null;
-  homepageUrl?: string | null;
+  homepage?: string | null;
+  localCategory?: string | null;
 }
 
 export interface StoreApiResponse {
