@@ -44,7 +44,6 @@ export default function StoreNewPage() {
           <p className="mt-1 text-sm leading-6 text-gray-600">
             아래의 내용을 입력해서 맛집을 등록해주세요.
           </p>
-
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div className="sm:col-span-3">
               <label
