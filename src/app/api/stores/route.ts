@@ -96,3 +96,24 @@ export async function PUT(req: Request) {
 
   return NextResponse.json(result, { status: 200 });
 }
+
+export async function DELETE(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const id = searchParams.get("id");
+
+  if (id) {
+    const result = await prisma.store.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    return NextResponse.json(result, {
+      status: 200,
+    });
+  }
+
+  return NextResponse.json(null, {
+    status: 500,
+  });
+}
