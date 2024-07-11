@@ -1,3 +1,4 @@
+import axios from "axios";
 import { NextResponse } from "next/server";
 import prisma from "@/db";
 
@@ -45,4 +46,28 @@ export async function GET(req: Request) {
       status: 200,
     });
   }
+}
+
+export async function POST(req: Request) {
+  const formData = await req.json();
+  const headers = {
+    Authorization: `KakaoAK ${process.env.KAKAO_CLIENT_ID}`,
+  };
+
+  const { data } = await axios.get(
+    `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURI(
+      formData.address
+    )}`,
+    { headers }
+  );
+
+  const result = await prisma.store.create({
+    data: {
+      ...formData,
+      lat: parseFloat(data.documents[0].y),
+      lng: parseFloat(data.documents[0].x),
+    },
+  });
+
+  return NextResponse.json(result, { status: 200 });
 }
