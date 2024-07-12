@@ -9,6 +9,7 @@ import Link from "next/link";
 import Loader from "@/components/Loader";
 import Map from "@/components/Map";
 import Marker from "@/components/Marker";
+import Like from "@/components/Like";
 
 export default function StoreDetailPage({
   params,
@@ -77,6 +78,7 @@ export default function StoreDetailPage({
           </div>
           {status === "authenticated" && store && (
             <div className="flex items-center gap-4 px-4 py-3">
+              <Like storeId={store.id} />
               <Link
                 className="underline hover:text-gray-400 text-sm"
                 href={`/stores/${store?.id}/edit`}>
