@@ -25,7 +25,6 @@ export default function Like({ storeId }: LikeProps) {
   });
 
   const toggleLike = async () => {
-    // 찜하기 및 찜취소 로직
     if (session?.user && store) {
       try {
         const like = await axios.post("/api/likes", {
@@ -37,7 +36,7 @@ export default function Like({ storeId }: LikeProps) {
         } else {
           toast.warn("찜을 취소했습니다.");
         }
-        refetch(); // 이걸 해야 하트가 제대로 변경됨
+        refetch();
       } catch (e) {
         console.log(e);
       }
