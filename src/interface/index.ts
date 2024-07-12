@@ -19,6 +19,12 @@ export interface StoreApiResponse {
   page?: number;
 }
 
+export interface LikeApiResponse {
+  data: LikeInterface[];
+  totalPage?: number;
+  page?: number;
+}
+
 export interface Location {
   lat: number;
   lng: number;
