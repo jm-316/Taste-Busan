@@ -9,6 +9,7 @@ export interface StoreType {
   time?: string | null;
   homepage?: string | null;
   localCategory?: string | null;
+  likes?: LikeInterface[];
 }
 
 export interface StoreApiResponse {
@@ -27,4 +28,11 @@ export interface Location {
 export interface SearchType {
   query?: string;
   district?: string;
+}
+
+export interface LikeInterface {
+  id: number;
+  storeId: number;
+  userId: number;
+  store?: StoreType;
 }
