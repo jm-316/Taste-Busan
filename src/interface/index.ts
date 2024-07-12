@@ -9,12 +9,19 @@ export interface StoreType {
   time?: string | null;
   homepage?: string | null;
   localCategory?: string | null;
+  likes?: LikeInterface[];
 }
 
 export interface StoreApiResponse {
   data: StoreType[];
   totalPage?: number;
   totalCount?: number;
+  page?: number;
+}
+
+export interface LikeApiResponse {
+  data: LikeInterface[];
+  totalPage?: number;
   page?: number;
 }
 
@@ -27,4 +34,11 @@ export interface Location {
 export interface SearchType {
   query?: string;
   district?: string;
+}
+
+export interface LikeInterface {
+  id: number;
+  storeId: number;
+  userId: number;
+  store?: StoreType;
 }

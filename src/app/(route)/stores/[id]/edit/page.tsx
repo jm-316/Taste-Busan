@@ -22,7 +22,7 @@ export default function StoreEditPage({ params }: { params: { id: string } }) {
 
   const fetchStore = async () => {
     const { data } = await axios(`/api/stores?id=${id}`);
-    console.log(data);
+
     setValue("id", data.id);
     setValue("name", data.name);
     setValue("phone", data.phone);

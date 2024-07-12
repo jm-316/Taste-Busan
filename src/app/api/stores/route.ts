@@ -1,5 +1,7 @@
 import axios from "axios";
 import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]/route";
 import prisma from "@/db";
 
 export async function GET(req: Request) {
@@ -9,6 +11,8 @@ export async function GET(req: Request) {
   const query = searchParams.get("query");
   const district = searchParams.get("district");
   const id = searchParams.get("id");
+
+  const session = await getServerSession(authOptions);
 
   if (page) {
     const count = await prisma.store.count();
@@ -39,6 +43,11 @@ export async function GET(req: Request) {
       orderBy: { id: "asc" },
       where: {
         id: id ? parseInt(id) : {},
+      },
+      include: {
+        likes: {
+          where: session ? { userId: parseInt(session?.user?.id) } : {},
+        },
       },
     });
 

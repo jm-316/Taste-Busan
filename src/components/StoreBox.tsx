@@ -10,6 +10,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { RootState } from "@/store/store";
 import { setCurrentStore } from "@/slices/mapSlice";
+import Like from "./Like";
 
 export default function StoreBox() {
   const store = useSelector((state: RootState) => state.map.currentStoreState);
@@ -38,6 +39,7 @@ export default function StoreBox() {
                 <FiMapPin />
                 {store?.address || "주소가 없습니다."}
               </div>
+              <Like storeId={store?.id} />
             </div>
             <div className="mt-2 flex gap-2 items-center">
               <AiOutlinePhone />
