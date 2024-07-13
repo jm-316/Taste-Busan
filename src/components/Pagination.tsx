@@ -40,7 +40,7 @@ export default function Pagination({ total = 0, page, pathname }: Pagination) {
           {total > parseInt(page) && (
             <Link
               href={{
-                pathname: "/stores",
+                pathname,
                 query: { page: parseInt(page) + 1 },
               }}>
               <span className={`px-3 py-2 rounded border shadow-sm bg-white`}>

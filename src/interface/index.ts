@@ -10,6 +10,7 @@ export interface StoreType {
   homepage?: string | null;
   localCategory?: string | null;
   likes?: LikeInterface[];
+  user?: UserInterface[];
 }
 
 export interface StoreApiResponse {
@@ -40,5 +41,10 @@ export interface LikeInterface {
   id: number;
   storeId: number;
   userId: number;
+  store?: StoreType;
+}
+
+export interface UserInterface {
+  id: number;
   store?: StoreType;
 }
