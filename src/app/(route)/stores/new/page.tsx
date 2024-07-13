@@ -1,15 +1,17 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { DISTRICT_ARR } from "@/data/store";
 import { StoreType } from "@/interface";
 import AddressSearch from "@/components/AddressSearch";
 
 export default function StoreNewPage() {
   const router = useRouter();
+  const { data: session } = useSession();
   const {
     register,
     handleSubmit,
@@ -19,7 +21,10 @@ export default function StoreNewPage() {
 
   const onSubmit = async (data: any) => {
     try {
-      const result = await axios.post("/api/stores", data);
+      const result = await axios.post("/api/stores", {
+        ...data,
+        userId: session?.user.id,
+      });
 
       if (result.status === 200) {
         toast.success("맛집을 등록했습니다.");
