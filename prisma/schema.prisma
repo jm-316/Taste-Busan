@@ -22,10 +22,12 @@ model User {
   accounts  Account[]
   sessions  Session[]
   likes     Like[]
+  stores    Store[]
 }
 
 model Store {
   id        Int     @id @default(autoincrement())
+  userId    Int     @default(1)
   phone     String?
   address   String?
   lat       Float?
@@ -36,6 +38,8 @@ model Store {
   homepage  String?
   localCategory String?
   likes     Like[]
+  user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId])
 }
 
 model Like {
