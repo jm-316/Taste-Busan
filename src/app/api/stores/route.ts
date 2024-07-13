@@ -11,10 +11,40 @@ export async function GET(req: Request) {
   const query = searchParams.get("query");
   const district = searchParams.get("district");
   const id = searchParams.get("id");
+  const mypage = searchParams.get("mypage");
 
   const session = await getServerSession(authOptions);
+  const userId = session?.user?.id as string;
 
-  if (page) {
+  if (page && mypage) {
+    const skipPage = parseInt(page) - 1;
+    const count = await prisma.store.count({
+      where: { userId: parseInt(userId) },
+    });
+
+    const stores = await prisma.store.findMany({
+      orderBy: {
+        id: "asc",
+      },
+      where: {
+        userId: parseInt(userId),
+      },
+      skip: skipPage * parseInt(limit),
+      take: parseInt(limit),
+    });
+
+    return NextResponse.json(
+      {
+        page: parseInt(page),
+        data: stores,
+        totalCount: count,
+        totalPage: Math.ceil(count / parseInt(limit)),
+      },
+      {
+        status: 200,
+      }
+    );
+  } else if (page) {
     const count = await prisma.store.count();
     const skipPage = parseInt(page) - 1;
     const stores = await prisma.store.findMany({
@@ -46,7 +76,7 @@ export async function GET(req: Request) {
       },
       include: {
         likes: {
-          where: session ? { userId: parseInt(session?.user?.id) } : {},
+          where: session ? { userId: parseInt(userId) } : {},
         },
       },
     });
@@ -58,6 +88,7 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
+  const session = await getServerSession(authOptions);
   const formData = await req.json();
   const headers = {
     Authorization: `KakaoAK ${process.env.KAKAO_CLIENT_ID}`,
@@ -75,6 +106,7 @@ export async function POST(req: Request) {
       ...formData,
       lat: parseFloat(data.documents[0].y),
       lng: parseFloat(data.documents[0].x),
+      userId: parseInt(session?.user.id as string),
     },
   });
 
