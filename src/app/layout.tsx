@@ -5,6 +5,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Taste Busan",
   description: "부산의 맛집을 알려주는 맛집 앱",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({
