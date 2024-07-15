@@ -76,22 +76,24 @@ export default function StoreDetailPage({
               {store?.name}
             </h3>
           </div>
-          {store.userId === parseInt(session?.user.id as string) && store && (
-            <div className="flex items-center gap-4 px-4 py-3">
-              <Like storeId={store.id} />
-              <Link
-                className="underline hover:text-gray-400 text-sm"
-                href={`/stores/${store?.id}/edit`}>
-                수정
-              </Link>
-              <button
-                type="button"
-                className="underline hover:text-gray-400 text-sm"
-                onClick={handleDelete}>
-                삭제
-              </button>
-            </div>
-          )}
+          <div className="flex items-center gap-4 px-4 py-3">
+            <Like storeId={store.id} />
+            {store.userId === parseInt(session?.user.id as string) && store && (
+              <>
+                <Link
+                  className="underline hover:text-gray-400 text-sm"
+                  href={`/stores/${store?.id}/edit`}>
+                  수정
+                </Link>
+                <button
+                  type="button"
+                  className="underline hover:text-gray-400 text-sm"
+                  onClick={handleDelete}>
+                  삭제
+                </button>
+              </>
+            )}
+          </div>
         </div>
         <div className="mt-6 border-t border-gray-100">
           <dl className="divide-y divide-gray-100">
