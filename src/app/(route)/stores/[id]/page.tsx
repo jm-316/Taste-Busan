@@ -16,7 +16,7 @@ export default function StoreDetailPage({
 }: {
   params: { id: string };
 }) {
-  const { status } = useSession();
+  const { data: session } = useSession();
   const id = params.id;
   const router = useRouter();
 
@@ -76,7 +76,7 @@ export default function StoreDetailPage({
               {store?.name}
             </h3>
           </div>
-          {status === "authenticated" && store && (
+          {store.userId === parseInt(session?.user.id as string) && store && (
             <div className="flex items-center gap-4 px-4 py-3">
               <Like storeId={store.id} />
               <Link
